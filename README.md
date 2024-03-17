@@ -228,57 +228,109 @@ GPIO_Init(GPIOx, &GPIO_InitStruct);
 2 Các hàm cơ bản trên GPIO.
 
 Thư viện SPL hỗ trợ sẵn các hàm để thực thi trên các GPIO.
+
 GPIO_SetBits(GPIO_TypeDef GPIOx, uint16_t GPIO_Pin)*
+
 ● Mô tả: Đặt một hoặc nhiều chân GPIO ở mức cao (logic 1).
+
 ● Tham số:
+
 ● GPIOx: là cổng GPIO muốn điều khiển (ví dụ: GPIOA, GPIOB,...).
+
 ● GPIO_Pin: chọn chân hoặc chân cần đặt ở mức cao (ví dụ: GPIO_Pin_0, GPIO_Pin_1 hoặc kết hợp như GPIO_Pin_0 | GPIO_Pin_1).
+
  GPIO_ResetBits(GPIO_TypeDef GPIOx, uint16_t GPIO_Pin)*
+ 
 ● Mô tả: Đặt một hoặc nhiều chân GPIO ở mức thấp (logic 0).
+
 ● Tham số: Tương tự như hàm GPIO_SetBits.
+
 GPIO_ReadInputDataBit(GPIO_TypeDef GPIOx, uint16_t GPIO_Pin)*
+
 ● Mô tả: Đọc trạng thái của một chân GPIO đã được cấu hình là input.
+
 ● Tham số: Tương tự như hàm GPIO_SetBits.
+
 ● Giá trị trả về: Trả về Bit_SET nếu chân đang ở mức cao hoặc Bit_RESET nếu chân đang ở mức thấp.
+
 GPIO_ReadOutputDataBit(GPIO_TypeDef GPIOx, uint16_t GPIO_Pin)*
+
 ● Mô tả: Đọc trạng thái của một chân GPIO đã được cấu hình là output.
+
 ● Tham số: Tương tự như hàm GPIO_SetBits.
+
 ● Giá trị trả về: Trả về Bit_SET nếu chân đang ở mức cao hoặc Bit_RESET nếu chân đang ở mức thấp.
+
 GPIO_WriteBit(GPIO_TypeDef GPIOx, uint16_t GPIO_Pin, BitAction BitVal)*
+
 ● Mô tả: Đặt trạng thái của một chân GPIO dựa trên giá trị của BitVal.
+
 ● Tham số:
+
 ● GPIOx và GPIO_Pin tương tự như hàm GPIO_SetBits.
+
 ● BitVal: là giá trị mà bạn muốn đặt cho chân GPIO, có thể là Bit_SET hoặc Bit_RESET.
+
  GPIO_ReadInputData(GPIO_TypeDef GPIOx)*
+ 
 ● Mô tả: Đọc giá trị của tất cả các chân GPIO đã được cấu hình là đầu vào trên cổng GPIO chỉ định.
+
 ● Tham số:
+
 ● GPIOx: cổng GPIO mà bạn muốn đọc (ví dụ: GPIOA, GPIOB,...).
+
 ● Giá trị trả về: Một giá trị 16-bit biểu diễn trạng thái của tất cả các chân trên cổng GPIO.
+
  GPIO_ReadOutputData(GPIO_TypeDef GPIOx)*
+ 
 ● Mô tả: Đọc giá trị của tất cả các chân GPIO đã được cấu hình là đầu ra trên cổng GPIO chỉ định.
+
 ● Tham số:
+
 ● GPIOx: cổng GPIO mà bạn muốn đọc.
+
 ● Giá trị trả về: Một giá trị 16-bit biểu diễn trạng thái của tất cả các chân trên cổng GPIO.
+
  GPIO_Write(GPIO_TypeDef GPIOx, uint16_t PortVal)*
+ 
 ● Mô tả: Ghi giá trị cho toàn bộ cổng GPIO.
+
 ● Tham số:
+
 ● GPIOx: cổng GPIO bạn muốn ghi.
+
 ● PortVal: giá trị 16-bit mà bạn muốn đặt cho cổng GPIO.
+
  GPIO_PinLockConfig(GPIO_TypeDef GPIOx, uint16_t GPIO_Pin)*
+ 
 ● Mô tả: Khóa cấu hình của chân GPIO. Sau khi chân đã bị khóa, bạn sẽ không thể thay đổi cấu hình của nó cho đến khi hệ thống được reset.
+
 ● Tham số:
+
 ● GPIOx: cổng GPIO mà bạn muốn khóa chân.
+
 ● GPIO_Pin: chọn chân cần khóa (ví dụ: GPIO_Pin_0, GPIO_Pin_1 hoặc kết hợp như GPIO_Pin_0 | GPIO_Pin_1).
+
 GPIO_EventOutputConfig(uint8_t GPIO_PortSource, uint8_t GPIO_PinSource)
+
 ● Mô tả: Cấu hình chân sự kiện đầu ra.
+
 ● Tham số:
+
 ● GPIO_PortSource: xác định cổng GPIO.
+
 ● GPIO_PinSource: xác định chân GPIO.
+
  GPIO_EventOutputCmd(FunctionalState NewState)
+ 
 ● Mô tả: Cho phép hoặc vô hiệu hóa chân sự kiện đầu ra.
+
 ● Tham số:
+
 ● NewState: trạng thái mới của chân. Có thể là ENABLE hoặc DISABLE.
+
  GPIO_AFIODeInit()
+ 
 ● Mô tả: Đặt lại tất cả các thanh ghi của AFIO (Alternate Function IO) về giá trị mặc định.
 
   
