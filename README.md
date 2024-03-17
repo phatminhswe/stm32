@@ -6,6 +6,118 @@
   
 </details>
 <details><summary> LECTURE 3 : Ngắt và Timer </summary>
+
+# 1.Ngắt
+
+Ngắt là 1 sự kiện khẩn cấp xảy ra trong hay ngoài vi điều khiển. Nó yêu MCU phải dừng chương trình chính và thực thi chương trình ngắt.
+
+**Các loại ngắt thông dụng**
+
+Mỗi ngắt có 1 trình phục vụ ngắt, sẽ yêu cầu MCU thực thi lệnh tại trình phục vụ ngắt khi có ngắt xảy ra.
+Các ngắt có các địa chỉ cố định trong bộ nhớ để giữ các trình phục vụ. Các địa chỉ này gọi là vector ngắt.
+
+![image](https://github.com/phatminhswe/stm32/assets/162662273/3f0b8c5f-deab-4e8d-b7f1-24f1b228fc53)
+
+
+Quá trình ngắt:
+
+![image](https://github.com/phatminhswe/stm32/assets/162662273/031f2525-dfff-424c-a313-efa6726625d5)
+
+
+
+**Ngắt ngoài: **
+
+Xảy ra khi có thay đổi điện áp trên các chân GPIO được cấu hình làm ngõ vào ngắt.
+
+LOW: kích hoạt ngắt liên tục khi chân ở mức thấp.
+
+HIGH: Kích hoạt liên tục khi chân ở mức cao.
+
+Rising: Kích hoạt khi trạng thái trên chân chuyển từ thấp lên cao.
+
+Falling: Kích hoạt khi trạng thái trên chân chuyển từ cao xuống thấp.
+
+**Ngắt timer:**
+
+Ngắt Timer xảy ra khi giá trị trong thanh ghi đếm của timer tràn. Giá trị tràn được xác định bởi giá trị cụ thể trong thanh ghi đếm của timer.
+Vì đây là ngắt nội trong MCU, nên phải reset giá trị thanh ghi timer để có thể tạo được ngắt tiếp theo.
+
+
+**Ngắt truyền nhận:**
+
+Ngắt truyền nhận xảy ra khi có sự kiện truyền/nhận dữ liệu giữ MCU với các thiết bị bên ngoài hay với MCU. Ngắt này sử dụng cho nhiều phương thức như Uart, SPI, I2C…v.v nhằm đảm bảo việc truyền nhận chính xác.
+
+**Độ ưu tiên ngắt**
+
+Độ ưu tiên ngắt là khác nhau ở các ngắt. Nó xác định ngắt nào được quyền thực thi khi nhiều ngắt xảy ra đồng thời.
+
+STM32 quy định ngắt nào có số thứ tự ưu tiên càng thấp thì có quyền càng cao. Các ưu tiên ngắt có thể lập trình được.
+
+# 2.TIMER
+
+Giới thiệu về Timer:
+
+Có thể hiểu 1 cách đơn giản: timer là 1 mạch digital logic có vai trò đếm mỗi chu kỳ clock (đếm lên hoặc đếm xuống).
+
+Timer còn có thể hoạt động ở chế độ counter, nó sẽ nhận xung clock từ các tín hiệu ngoài. Có thể là từ 1 nút nhấn, bộ đếm sẽ được tăng sau mỗi lần bấm nút (sườn lên hoặc sườn xuống tùy vào cấu hình).
+
+Ngoài ra còn các chế độ khác (ở đây mình chỉ liệt kê, sau này sẽ có bài viết riêng về các chế độ này):
+
+·        PWM Mode
+·        Advanced PWM Mode
+·        Output Compare Mode
+·        One-Pulse Mode
+·        Input Capture Mode
+·        Encoder Mode
+·        Timer Gate Mode
+·        Timer DMA Burst Mode
+·        IRTIM Infrared Mode
+
+STM32f103C8 có tất cả 7 timer nhưng trong đó đã bao gồm 1 systick timer, 2 watchdog timer. Vậy chỉ còn lại 4 timer dùng cho các chức năng như ngắt, timer base, PWM, Encoder, Input capture…. Trong đó TIM1 là Timer đặc biệt, chuyên dụng cho việc xuất xung với các mode xuất xung, các mode bảo vệ đầy đủ hơn so với các timer khác. TIM1 thuộc khối clock APB2, còn các TIM2,TIM3,TIM4 thuộc nhóm APB1.
+
+
+**Timer clock**
+
+Khi không có cấu hình gì liên quan đến clock và đã gắn đúng thạch anh ngoài trên chân PD0(5) và PD1(6) thì clock tương ứng của TIM1,TIM2,TIM3,TIM4 đã là 72Mhz. Cần ghi nhớ là sử dụng timer nào thì cấp clock cho timer đó theo đúng nhánh clock.
+
+**Prescaler**
+
+Prescaler là bộ chia tần số của timer. Bộ chia này có giá trị tối đa là 16 bit tương ứng với giá trị là 65535. Các giá trị này có thể được thay đổi và điều chỉnh bằng lập trình. Tần số sau bộ chia này sẽ được tính là:
+```
+FCK_CNT = fCK_PSC/(PSC+1).
+```
+
+FCK_CNT: tần số sau bộ chia.
+
+fCK_PSC: tần số clock đầu vào cấp cho timer.
+
+PSC: chính là giá trị truyền vào được lập trình bằng phần mềm
+
+
+**Auto Reload Value**
+
+Auto Reload value là giá trị bộ đếm tối đa có thể được điều chỉnh để nạp vào cho timer. Giá trị bộ đếm này được cài đặt tối đa là 16bit tương ứng với giá trị là 65535.Từ các thông số trên ta rút ra công thức cần tính cuối cùng đó là:
+
+```
+FTIMER= fSYSTEM/[(PSC+1)(Period+1)]
+```
+
+FTIMER : là giá trị cuối cùng của bài toán, đơn vị là hz.
+FSYSTEM : tần số clock hệ thống được chia cho timer sử dụng, đơn vị là hz.
+PSC : giá trị nạp vào cho bộ chia tần số của timer. Tối đa là 65535.
+Period : giá trị bộ đếm nạp vào cho timer. Tối đa là 65535.
+
+**Cấu hình Timer**
+
+Tương tự các ngoại vi khác, cần xác định clock cấp cho timer, các tham số cho timer được cấu hình trong struct TIM_TimBaseInitTypeDef, cuối cùng gọi hàm TIM_TimBaseInit() để khởi tạo timer.
+
+![image](https://github.com/phatminhswe/stm32/assets/162662273/17a29070-22d2-42b0-9e14-1145ee346b01)
+
+
+
+7199 tương ứng với giá trị PSC, 9999 tương ứng với Period. Clock cung cấp cho TIM4 là 72Mhz. Tính theo công thức ta sẽ được thời gian ngắt tràn là 1s. 
+
+
   
 </details>
 <details><summary> LECTURE 4 : Các chuẩn giao tiếp </summary>
