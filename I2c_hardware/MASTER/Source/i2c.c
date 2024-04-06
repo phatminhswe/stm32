@@ -16,23 +16,23 @@ void I2C_write_byte(char data,char index){
     I2C_GenerateSTOP(I2C_Chanel, ENABLE);	
 }
 uint8_t I2C_read_byte(){
-	    uint8_t dataread;
-			 I2C_AcknowledgeConfig(I2C1,ENABLE);
-		  I2C_GenerateSTART(I2C_Chanel, ENABLE);
-			while (!I2C_CheckEvent(I2C_Chanel, I2C_EVENT_MASTER_MODE_SELECT));
+uint8_t dataread;
+  	I2C_AcknowledgeConfig(I2C1,ENABLE);
+	I2C_GenerateSTART(I2C_Chanel, ENABLE);
+	while (!I2C_CheckEvent(I2C_Chanel, I2C_EVENT_MASTER_MODE_SELECT));
 	
-			I2C_Send7bitAddress(I2C_Chanel, Address, I2C_Direction_Receiver);
-			while (!I2C_CheckEvent(I2C_Chanel, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
+	I2C_Send7bitAddress(I2C_Chanel, Address, I2C_Direction_Receiver);
+	while (!I2C_CheckEvent(I2C_Chanel, I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED));
 	
 			
-			while (!I2C_CheckEvent(I2C_Chanel, I2C_EVENT_MASTER_BYTE_RECEIVED))
-			;
-			dataread = I2C_ReceiveData(I2C_Chanel);
+	while (!I2C_CheckEvent(I2C_Chanel, I2C_EVENT_MASTER_BYTE_RECEIVED))
+	;
+	dataread = I2C_ReceiveData(I2C_Chanel);
 			
-			I2C_GenerateSTOP(I2C_Chanel,ENABLE);
+	I2C_GenerateSTOP(I2C_Chanel,ENABLE);
 			
-      I2C_AcknowledgeConfig(I2C_Chanel,DISABLE);
-		  return dataread;
+       I2C_AcknowledgeConfig(I2C_Chanel,DISABLE);
+	return dataread;
 }
 void I2C_config (void){
 		
